@@ -16,4 +16,7 @@ APP_NAME = env.str('APP_NAME', default='Sample Chat')
 
 REDIS_HOST = env.str('REDIS_HOST')
 
+MONGO_HOST = env.str('MONGO_HOST')
+MONGO_DB_NAME = env.str('MONGO_DB_NAME')
+
 PROJECT_ROOT = pathlib.Path(__file__).parent.parent
