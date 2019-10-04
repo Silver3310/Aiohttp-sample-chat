@@ -1,5 +1,7 @@
 from auth.routes import setup_routers as auth_routers
 
+from .common import STATIC_DIR
+
 
 def setup_routers(app):
     """
@@ -9,3 +11,11 @@ def setup_routers(app):
     """
 
     auth_routers(app)
+
+
+def setup_static_routes(app):
+    app.router.add_static(
+        '/static/',
+        path=STATIC_DIR,
+        name='static'
+    )

@@ -1,32 +1,59 @@
 import logging
+import asyncio
 
+import aioredis
 import jinja2
 import aiohttp_jinja2
 from aiohttp import web
 from aiohttp_session import redis_storage
 from aiohttp_session import setup
-from aioredis.commands import Redis
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from config.common import REDIS_HOST
+from config.common import REDIS_PORT
 from config.common import MONGO_DB_NAME
 from config.common import MONGO_HOST
 from config.routes import setup_routers
+from config.routes import setup_static_routes
 
 
-def main():
+async def make_redis_pool():
     """
-    Run the application
+    Redis client bound to pool of connections (auto-reconnecting)
     """
-    app = web.Application()
+
+    redis_address = (REDIS_HOST, REDIS_PORT)
+    return await aioredis.create_redis_pool(redis_address, timeout=1)
+
+
+def configure_redis(app):
+    """
+    Configure Redis for sessions
+    """
 
     # save sessions thru redis
-    print(REDIS_HOST)
-    redis_pool = Redis(REDIS_HOST)
+    loop = asyncio.get_event_loop()
+    redis_pool = loop.run_until_complete(make_redis_pool())
     setup(
         app,
-        redis_storage.RedisStorage(redis_pool=redis_pool)
+        redis_storage.RedisStorage(
+            redis_pool=redis_pool,
+            cookie_name='FIXATED'
+        )
     )
+
+    async def dispose_redis_pool(app_):
+        """Gracefully closing underlying connection"""
+        redis_pool.close()
+        await redis_pool.wait_closed()
+
+    app.on_cleanup.append(dispose_redis_pool)
+
+
+def configure_jinja2(app):
+    """
+    Configure Jinja2
+    """
 
     # use the jinja2 as a templating language
     aiohttp_jinja2.setup(
@@ -37,15 +64,35 @@ def main():
         ),
     )
 
+
+def configure_db(app):
+    """
+    Configure the database
+    """
+
     app['db'] = getattr(
         AsyncIOMotorClient(MONGO_HOST),
         MONGO_DB_NAME
     )
 
+
+def main():
+    """
+    Run the application
+    """
+    app = web.Application()
+
+    # configurations
+    configure_redis(app)
+    configure_jinja2(app)
+    configure_db(app)
+
     # URLs dispatcher
     setup_routers(app)
+    setup_static_routes(app)
 
-    logging.basicConfig(level=logging.DEBUG)  # console level debug
+    # console level debug
+    logging.basicConfig(level=logging.DEBUG)
     web.run_app(app)
 
 
