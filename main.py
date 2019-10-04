@@ -13,8 +13,11 @@ from config.common import REDIS_HOST
 from config.common import REDIS_PORT
 from config.common import MONGO_DB_NAME
 from config.common import MONGO_HOST
+
 from config.routes import setup_routers
 from config.routes import setup_static_routes
+
+from config.middlewares import current_user_ctx_processor
 
 
 async def make_redis_pool():
@@ -62,6 +65,7 @@ def configure_jinja2(app):
             package_name='main',
             package_path='templates'
         ),
+        context_processors=[current_user_ctx_processor]
     )
 
 

@@ -16,13 +16,20 @@
 
         <div class="navbar-start">
             <a class="navbar-item" href="{{ url('index') }}">Home</a>
+            {% if current_user %}
+                <span class="navbar-item">Glad to see you again, {{ current_user.first_name }}! :)</span>
+            {% endif %}
         </div>
 
         <div class="navbar-end">
-            <a class="navbar-item" href="{{ url('login') }}">Login</a>
-            <a class="navbar-item" href="{{ url('signup') }}">Sign up</a>
+            {% if is_anonymous %}
+                <a class="navbar-item" href="{{ url('login') }}">Login</a>
+                <a class="navbar-item" href="{{ url('signup') }}">Sign up</a>
+            {% endif %}
 
-            <a class="navbar-item" href="{{ url('logout') }}">Log out</a>
+            {% if current_user %}
+                <a class="navbar-item" href="{{ url('logout') }}">Log out</a>
+            {% endif %}
         </div>
 
     </div>
