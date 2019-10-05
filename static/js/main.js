@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function(){
         messageElem.append($('<p>').html(htmlText));
 
         messageElem.find('p').each(function(i, value){
-            height += parseInt($(this).height());
+            height += parseInt($(this).height(), 10);
         });
         messageElem.animate({scrollTop: height});
     }
