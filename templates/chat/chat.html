@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% set title = "Chat" %}
+
+{% block content %}
+
+    <h3>{{ title }}</h3>
+
+    <div id="messages">
+
+        {% for message in messages %}
+            <p>[ {{ message['time'].strftime('%H:%M:%S') }} ] </p> {{ message['user_id'] }}: {{ message['msg'] }}
+        {% endfor %}
+
+    </div>
+
+    <p>
+        <label for="message">Message</label>
+        <input type="text" id="message" autocomplete="off">
+        <input type="submit" id="submit" value="Submit">
+        <input type="button" id="exit" value="Exit">
+    </p>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url('static', filename='js/jquery.js') }}"></script>
+    <script src="{{ url('static', filename='js/main.js') }}"></script>
+{% endblock %}

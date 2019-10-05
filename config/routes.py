@@ -1,4 +1,5 @@
 from auth.routes import setup_routers as auth_routers
+from chat.routes import setup_routers as chat_routers
 
 from .common import STATIC_DIR
 
@@ -11,6 +12,7 @@ def setup_routers(app):
     """
 
     auth_routers(app)
+    chat_routers(app)
 
 
 def setup_static_routes(app):

@@ -53,6 +53,24 @@ def configure_redis(app):
     app.on_cleanup.append(dispose_redis_pool)
 
 
+def configure_web_sockets(app):
+    """
+    Configure WebSockets
+    """
+
+    async def on_shutdown(app):
+        for ws in app['websockets']:
+            await ws.close(
+                code=1001,
+                message='Server shutdown'
+            )
+
+    app.on_cleanup.append(on_shutdown)
+
+    # a list of sockets to close after use
+    app['websockets'] = list()
+
+
 def configure_jinja2(app):
     """
     Configure Jinja2
@@ -90,6 +108,7 @@ def main():
     configure_redis(app)
     configure_jinja2(app)
     configure_db(app)
+    configure_web_sockets(app)
 
     # URLs dispatcher
     setup_routers(app)
