@@ -14,7 +14,16 @@ class MessagesListView(web.View):
 
     @aiohttp_jinja2.template('chat/chat.html')
     async def get(self):
-        messages = await Message.get_messages(self.app['db'])
+        messages = await Message.get_messages(db=self.app['db'])
+
+        for message in messages:
+            user = await User.get_user_by_id(
+                db=self.app['db'],
+                user_id=message['user_id']
+            )
+            message['user'] = user['first_name']
+            message['email'] = user['email']
+
         return {'messages': messages}
 
 

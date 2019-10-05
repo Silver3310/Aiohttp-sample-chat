@@ -9,7 +9,7 @@
     <div id="messages">
 
         {% for message in messages %}
-            <p>[ {{ message['time'].strftime('%H:%M:%S') }} ] </p> {{ message['user_id'] }}: {{ message['msg'] }}
+            <p>[ {{ message['time'].strftime('%H:%M:%S') }} ] {{ message['user'] }} ({{ message['email'] }}): {{ message['msg'] }}</p>
         {% endfor %}
 
     </div>
