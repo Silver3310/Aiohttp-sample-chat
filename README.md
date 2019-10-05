@@ -1,4 +1,6 @@
 # Sample chat with aiohttp
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/3a8de769453143c190b3e3b5068ad1d4)](https://www.codacy.com/manual/Silver3310/Aiohttp-sample-chat?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Silver3310/Aiohttp-sample-chat&amp;utm_campaign=Badge_Grade)
   
 A minor project showcasing how WebSockets work using aiohttp. It has two main applications, for authentication and websockets' implementation.
   
