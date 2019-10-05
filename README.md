@@ -42,4 +42,5 @@ Make sure, you have python 3.7, python3.7-venv, git, and MongoBD being installed
 3.   ```python3.7 -m venv venv```
 4.   ```source venv/bin/activate```
 5.   ```pip install -r requirements.txt```
-6.   ```python main.py```
+6.   ```echo "REDIS_HOST='<YOUR_REDIS_HOST>'\nREDIS_PORT='<YOUR_REDIS_PORT>'\nMONGO_HOST='<YOUR_MONGO_HOST_AND_PORT>'\nMONGO_DB_NAME='<YOUR_MONGO_DB_NAME>'" > .env```
+7.   ```python main.py```
