@@ -64,7 +64,7 @@ class WebSocket(web.View):
                     await ws.close()
                 else:
                     # otherwise, it's a message
-                    message = await Message.save(
+                    await Message.save(
                         db=self.app['db'],
                         user_id=user['_id'],
                         msg=msg.data
